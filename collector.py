@@ -13,7 +13,7 @@ import json
 import os
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -23,6 +23,29 @@ import requests
 # ============================================================
 # CONFIGURAÇÃO
 # ============================================================
+
+BRASILIA = timezone(timedelta(hours=-3))
+
+DATAS_INICIO_DIVULGACAO = {
+    (2026, 10, 4),
+    (2026, 10, 25),
+}
+
+def divulgacao_liberada() -> bool:
+    agora = datetime.now(BRASILIA)
+
+    if (agora.year, agora.month, agora.day) in DATAS_INICIO_DIVULGACAO:
+        if agora.hour < 17:
+            print(
+                "[INFO] Divulgação dos resultados ainda não começou. "
+                f"Horário de Brasília: {agora:%d/%m/%Y %H:%M:%S}. "
+                "Próxima liberação: 17:00."
+            )
+            return False
+
+    return True
+
+BASE_URL = os.getenv(
 
 BASE_URL = os.getenv(
     "TSE_BASE_URL",
@@ -226,23 +249,27 @@ def selecionar_eleicoes(
         ]
 
     else:
-
+    
         turno_numero = int(turno)
-
+    
         selecionadas = [
             e for e in eleicoes
             if int(e.get("t", 1)) == turno_numero
         ]
-
+    
+    selecionadas = [
+        e for e in selecionadas
+        if str(e.get("cd")) != "6261"
+    ]
+    
     if not selecionadas:
-
+    
         raise RuntimeError(
             f"Não existe eleição publicada para "
             f"o turno {turno}."
         )
 
-    return selecionadas
-
+return selecionadas
 
 # ============================================================
 # URLS
@@ -259,7 +286,7 @@ def montar_url(
 
     codigo_eleicao = str(
         eleicao["cd"]
-    ).zfill(6)
+    )
 
     return (
         f"{BASE_URL}/"
@@ -564,7 +591,11 @@ def executar(turno: str) -> int:
     pleito = localizar_ele2026(
         config
     )
-
+    
+    if not divulgacao_liberada():
+        print("[INFO] Coleta encerrada antes do início da divulgação.")
+        return 0
+    
     eleicoes = selecionar_eleicoes(
         pleito,
         turno
