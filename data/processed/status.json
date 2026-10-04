@@ -1,0 +1,13 @@
+{
+  "projeto": "Radar Eleitoral 2026",
+  "versao_coletor": "V2",
+  "gerado_em_utc": "2026-10-04T18:05:35.243045+00:00",
+  "fonte": "TSE",
+  "eleicoes": [
+    "6257",
+    "6259",
+    "6261"
+  ],
+  "arquivos_acompanhamento": 0,
+  "arquivos_ea20": 0
+}
