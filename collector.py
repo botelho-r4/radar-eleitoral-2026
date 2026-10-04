@@ -55,10 +55,12 @@ def divulgacao_liberada() -> bool:
     return True
 
 
-BASE_URL = os.getenv(
-    "TSE_BASE_URL",
-    "https://resultados.tse.jus.br"
-).rstrip("/")
+BASE_URL = (
+    os.getenv(
+        "TSE_BASE_URL",
+        "https://resultados.tse.jus.br"
+    ).rstrip("/")
+)
 
 ENV = os.getenv(
     "TSE_ENV",
