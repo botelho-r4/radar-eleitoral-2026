@@ -1,0 +1,43 @@
+{
+  "base_url": "https://resultados.tse.jus.br",
+  "environment": "oficial",
+  "config_path": "/oficial/comum/config/ele-c.json",
+  "timeout_seconds": 20,
+  "ufs": [
+    "ac",
+    "al",
+    "ap",
+    "am",
+    "ba",
+    "ce",
+    "df",
+    "es",
+    "go",
+    "ma",
+    "mt",
+    "ms",
+    "mg",
+    "pa",
+    "pb",
+    "pr",
+    "pe",
+    "pi",
+    "rj",
+    "rn",
+    "rs",
+    "ro",
+    "rr",
+    "sc",
+    "sp",
+    "se",
+    "to"
+  ],
+  "cargo_codes": {
+    "presidente": "0001",
+    "governador": "0003",
+    "senador": "0005",
+    "deputado_federal": "0006",
+    "deputado_estadual": "0007",
+    "deputado_distrital": "0008"
+  }
+}
