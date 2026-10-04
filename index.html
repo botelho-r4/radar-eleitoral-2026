@@ -1,107 +1,100 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Radar Eleitoral 2026</title>
-  <meta name="description" content="Radar Eleitoral 2026 — painel de resultados oficiais do TSE." />
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Radar Eleitoral 2026 — painel de resultados oficiais do TSE.">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="hero">
-    <div class="hero-glow"></div>
-    <div class="brand">
-      <div class="brand-map" aria-hidden="true">✦</div>
-      <div>
-        <div class="brand-title">RADAR <span>ELEITORAL</span> <b>2026</b></div>
-        <div class="brand-subtitle">Resultados oficiais • TSE</div>
-        <p>Acompanhe a apuração das eleições em tempo real,<br>com dados oficiais do Tribunal Superior Eleitoral.</p>
+<header class="hero">
+  <div class="hero-glow"></div>
+  <div class="brand">
+    <div class="brand-map"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Brazil%20states.svg?width=420" alt="Mapa do Brasil"></div>
+    <div class="brand-copy">
+      <div class="brand-title">RADAR <span>ELEITORAL</span> <b>2026</b></div>
+      <div class="brand-subtitle">Resultados oficiais • TSE</div>
+      <p>Acompanhe a apuração das eleições em tempo real,<br>com dados oficiais do Tribunal Superior Eleitoral.</p>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="live"><i></i> AO VIVO</div>
+    <div class="updated"><small>Última atualização</small><strong>04/10/2026 • 18:42:17</strong><span>(Horário de Brasília)</span></div>
+    <div class="tse-badge">
+      <img src="https://www.tse.jus.br/@@site-logo/logo.jpg" alt="TSE">
+      <div><strong>TSE</strong><small>Tribunal Superior<br>Eleitoral</small></div>
+    </div>
+  </div>
+</header>
+<nav class="nav-tabs">
+  <button class="home active" data-cargo="presidente">⌂</button>
+  <button data-cargo="presidente" class="tab-active">PRESIDENTE</button>
+  <button data-cargo="governador">GOVERNADOR</button>
+  <button data-cargo="senador">SENADOR</button>
+  <button data-cargo="deputado-federal">DEPUTADO FEDERAL</button>
+  <button data-cargo="deputado-estadual">DEPUTADO ESTADUAL/DISTRITAL</button>
+  <select id="country"><option>🇧🇷 Brasil</option></select>
+  <select id="uf">
+    <option value="Todas as UFs">Todas as UFs</option>
+    <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option><option value="AM">AM</option>
+    <option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option><option value="ES">ES</option>
+    <option value="GO">GO</option><option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
+    <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option><option value="PR">PR</option>
+    <option value="PE">PE</option><option value="PI">PI</option><option value="RJ">RJ</option><option value="RN">RN</option>
+    <option value="RS">RS</option><option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
+    <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+  </select>
+  <select id="municipio"><option value="Todos os municípios">Todos os municípios</option></select>
+</nav>
+<main class="container">
+  <section class="top-grid">
+    <div class="candidate-panel" id="presidente-panel"></div>
+    <div class="candidate-panel" id="governador-panel"></div>
+    <div class="candidate-panel" id="senador-panel"></div>
+    <section class="apuration card">
+      <div class="section-title"><span>▥</span> APURAÇÃO NACIONAL</div>
+      <div class="big-number"><span id="progress-number">68,4%</span></div>
+      <div class="progress"><span id="progress-bar"></span></div>
+      <div class="progress-caption">312.845 de 456.789 seções</div>
+      <div class="mini-grid">
+        <div><span>👥</span><small>Votos apurados</small><strong>74.382.921</strong></div>
+        <div><span>▤</span><small>Comparecimento</small><strong>78,2%</strong><em>de 156.473.921</em></div>
+        <div><span>◷</span><small>Atualização</small><strong>18:42:17</strong><em>04/10/2026</em></div>
       </div>
-    </div>
-    <div class="hero-right">
-      <div class="live"><i></i> AO VIVO</div>
-      <div class="updated"><small>Última atualização</small><strong>04/10/2026 • 18:42:17</strong><span>(Horário de Brasília)</span></div>
-      <div class="tse-badge"><span class="tse-square">◉</span><strong>TSE</strong><small>Tribunal<br>Superior<br>Eleitoral</small></div>
-    </div>
-  </header>
-
-  <nav class="nav-tabs">
-    <button class="home active" data-cargo="presidente">⌂</button>
-    <button data-cargo="presidente" class="tab-active">PRESIDENTE</button>
-    <button data-cargo="governador">GOVERNADOR</button>
-    <button data-cargo="senador">SENADOR</button>
-    <button data-cargo="deputado-federal">DEPUTADO FEDERAL</button>
-    <button data-cargo="deputado-estadual">DEPUTADO ESTADUAL/DISTRITAL</button>
-    <select id="country"><option>🇧🇷 Brasil</option></select>
-    <select id="uf">
-      <option value="Todas as UFs">Todas as UFs</option>
-      <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
-      <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
-      <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
-      <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
-      <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
-      <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
-      <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
-      <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
-      <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
-    </select>
-    <select id="municipio"><option value="Todos os municípios">Todos os municípios</option></select>
-  </nav>
-
-  <main class="container">
-    <section class="top-grid">
-      <div class="candidate-panel" id="presidente-panel"></div>
-      <div class="candidate-panel" id="governador-panel"></div>
-      <div class="candidate-panel" id="senador-panel"></div>
-      <section class="apuration card">
-        <div class="section-title"><span>▥</span> APURAÇÃO NACIONAL</div>
-        <div class="big-number"><span id="progress-number">68,4%</span></div>
-        <div class="progress"><span id="progress-bar"></span></div>
-        <div class="progress-caption">312.845 de 456.789 seções</div>
-        <div class="mini-grid">
-          <div><span>👥</span><small>Votos apurados</small><strong>74.382.921</strong></div>
-          <div><span>▤</span><small>Comparecimento</small><strong>78,2%</strong><em>de 156.473.921</em></div>
-          <div><span>◷</span><small>Atualização</small><strong>18:42:17</strong><em>04/10/2026</em></div>
-        </div>
-      </section>
     </section>
-
-    <section class="bottom-grid">
-      <section class="card evolution">
-        <div class="section-title"><span>▥</span> EVOLUÇÃO DA APURAÇÃO</div>
-        <div class="chart-wrap">
-          <svg viewBox="0 0 620 270" role="img" aria-label="Evolução da apuração">
-            <g class="grid"><line x1="55" y1="25" x2="590" y2="25"/><line x1="55" y1="80" x2="590" y2="80"/><line x1="55" y1="135" x2="590" y2="135"/><line x1="55" y1="190" x2="590" y2="190"/><line x1="55" y1="245" x2="590" y2="245"/></g>
-            <g class="axis"><text x="20" y="30">100%</text><text x="25" y="85">75%</text><text x="25" y="140">50%</text><text x="25" y="195">25%</text><text x="32" y="250">0%</text></g>
-            <polyline class="area" points="55,245 55,201 155,176 255,161 355,129 455,106 545,95 590,95 590,245"/>
-            <polyline class="line" points="55,201 155,176 255,161 355,129 455,106 545,95 590,95"/>
-            <g class="dots"><circle cx="55" cy="201" r="5"/><circle cx="155" cy="176" r="5"/><circle cx="255" cy="161" r="5"/><circle cx="355" cy="129" r="5"/><circle cx="455" cy="106" r="5"/><circle cx="545" cy="95" r="5"/><circle cx="590" cy="95" r="5"/></g>
-            <g class="labels"><text x="45" y="264">17:00</text><text x="145" y="264">17:30</text><text x="245" y="264">18:00</text><text x="345" y="264">18:30</text><text x="445" y="264">19:00</text><text x="535" y="264">19:30</text></g>
-            <rect class="bubble" x="528" y="50" rx="8" ry="8" width="65" height="30"/><text class="bubble-text" x="541" y="71">68,4%</text>
-          </svg>
-        </div>
-        <div class="legend"><span><i class="dot-blue"></i> Seções totalizadas</span><span><i class="dot-gray"></i> Projeção</span></div>
-      </section>
-
-      <section class="card map-card">
-        <div class="section-title"><span>♣</span> MAPA DO BRASIL</div>
-        <div class="map-area">
-          <div class="map-controls"><button>+</button><button>−</button><button>⌾</button></div>
-          <div class="brazil-map" aria-label="Mapa ilustrativo do Brasil">
-            <div class="state s1">RR</div><div class="state s2">AP</div><div class="state s3">AM</div><div class="state s4">PA</div><div class="state s5">MA</div><div class="state s6">CE</div><div class="state s7">RN</div><div class="state s8">PB</div><div class="state s9">PE</div><div class="state s10">AC</div><div class="state s11">RO</div><div class="state s12">TO</div><div class="state s13">PI</div><div class="state s14">BA</div><div class="state s15">MT</div><div class="state s16">GO</div><div class="state s17">DF</div><div class="state s18">MG</div><div class="state s19">ES</div><div class="state s20">MS</div><div class="state s21">RJ</div><div class="state s22">SP</div><div class="state s23">PR</div><div class="state s24">SC</div><div class="state s25">RS</div>
-          </div>
-          <div class="map-legend"><strong>Legenda</strong><span><i class="c c1"></i> Acima de 80%</span><span><i class="c c2"></i> Entre 60% e 80%</span><span><i class="c c3"></i> Entre 40% e 60%</span><span><i class="c c4"></i> Entre 20% e 40%</span><span><i class="c c5"></i> Abaixo de 20%</span><span><i class="c c6"></i> Sem dados</span></div>
-        </div>
-      </section>
-
-      <section class="card updates">
-        <div class="section-title"><span>◷</span> ÚLTIMAS ATUALIZAÇÕES <a href="#">Ver todas →</a></div>
-        <div class="update-list" id="updates"></div>
-      </section>
+  </section>
+  <section class="bottom-grid">
+    <section class="card evolution">
+      <div class="section-title"><span>▥</span> EVOLUÇÃO DA APURAÇÃO</div>
+      <div class="chart-wrap">
+        <svg viewBox="0 0 620 270" role="img" aria-label="Evolução da apuração">
+          <g class="grid"><line x1="55" y1="25" x2="590" y2="25"/><line x1="55" y1="80" x2="590" y2="80"/><line x1="55" y1="135" x2="590" y2="135"/><line x1="55" y1="190" x2="590" y2="190"/><line x1="55" y1="245" x2="590" y2="245"/></g>
+          <g class="axis"><text x="20" y="30">100%</text><text x="25" y="85">75%</text><text x="25" y="140">50%</text><text x="25" y="195">25%</text><text x="32" y="250">0%</text></g>
+          <polyline class="area" points="55,245 55,201 155,176 255,161 355,129 455,106 545,95 590,95 590,245"/>
+          <polyline class="line" points="55,201 155,176 255,161 355,129 455,106 545,95 590,95"/>
+          <g class="dots"><circle cx="55" cy="201" r="5"/><circle cx="155" cy="176" r="5"/><circle cx="255" cy="161" r="5"/><circle cx="355" cy="129" r="5"/><circle cx="455" cy="106" r="5"/><circle cx="545" cy="95" r="5"/><circle cx="590" cy="95" r="5"/></g>
+          <g class="labels"><text x="45" y="264">17:00</text><text x="145" y="264">17:30</text><text x="245" y="264">18:00</text><text x="345" y="264">18:30</text><text x="445" y="264">19:00</text><text x="535" y="264">19:30</text></g>
+          <rect class="bubble" x="528" y="50" rx="8" ry="8" width="65" height="30"/><text class="bubble-text" x="541" y="71">68,4%</text>
+        </svg>
+      </div>
+      <div class="legend"><span><i class="dot-blue"></i> Seções totalizadas</span><span><i class="dot-gray"></i> Projeção</span></div>
     </section>
-  </main>
-
-  <footer><span>Fonte: dados oficiais do TSE</span><span>Última atualização: 04/10/2026 • 18:42:17 (Horário de Brasília)</span><nav><a>Radar Eleitoral 2026</a><a>Transparência</a><a>Dados abertos</a><a>Sobre o projeto</a></nav></footer>
-  <script src="app.js"></script>
+    <section class="card map-card">
+      <div class="section-title"><span>✦</span> MAPA DO BRASIL</div>
+      <div class="map-area">
+        <div class="map-controls"><button>+</button><button>−</button><button>⌾</button></div>
+        <div class="real-map-wrap"><img class="real-map" src="https://commons.wikimedia.org/wiki/Special:FilePath/Brazil%20states.svg?width=720" alt="Mapa dos estados do Brasil"></div>
+        <div class="map-legend"><strong>Legenda</strong><span><i class="c c1"></i> Acima de 80%</span><span><i class="c c2"></i> Entre 60% e 80%</span><span><i class="c c3"></i> Entre 40% e 60%</span><span><i class="c c4"></i> Entre 20% e 40%</span><span><i class="c c5"></i> Abaixo de 20%</span><span><i class="c c6"></i> Sem dados</span></div>
+      </div>
+    </section>
+    <section class="card updates">
+      <div class="section-title"><span>◷</span> ÚLTIMAS ATUALIZAÇÕES <a href="#">Ver todas →</a></div>
+      <div class="update-list" id="updates"></div>
+    </section>
+  </section>
+</main>
+<footer><span>Fonte: dados oficiais do TSE</span><span>Última atualização: 04/10/2026 • 18:42:17 (Horário de Brasília)</span><nav><a>Radar Eleitoral 2026</a><a>Transparência</a><a>Dados abertos</a><a>Sobre o projeto</a></nav></footer>
+<script src="app.js"></script>
 </body>
 </html>
