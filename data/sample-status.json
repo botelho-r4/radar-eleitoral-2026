@@ -1,0 +1,8 @@
+{
+  "projeto": "Radar Eleitoral 2026",
+  "versao": "V1",
+  "status": "estrutura inicial",
+  "fonte": "TSE",
+  "configuracao_oficial": "https://resultados.tse.jus.br/oficial/comum/config/ele-c.json",
+  "observacao": "Os arquivos reais serão baixados automaticamente pelo coletor."
+}
