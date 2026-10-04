@@ -1,17 +1,17 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Radar Eleitoral 2026</title>
-  <meta name="description" content="Radar Eleitoral 2026 — painel de resultados oficiais do TSE.">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radar Eleitoral 2026</title>
+<meta name="description" content="Radar Eleitoral 2026 — painel de resultados oficiais do TSE.">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header class="hero">
   <div class="hero-glow"></div>
   <div class="brand">
-    <div class="brand-map"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Brazil%20states.svg?width=420" alt="Mapa do Brasil"></div>
+    <div class="brand-map" aria-hidden="true"></div>
     <div class="brand-copy">
       <div class="brand-title">RADAR <span>ELEITORAL</span> <b>2026</b></div>
       <div class="brand-subtitle">Resultados oficiais • TSE</div>
@@ -21,12 +21,10 @@
   <div class="hero-right">
     <div class="live"><i></i> AO VIVO</div>
     <div class="updated"><small>Última atualização</small><strong>04/10/2026 • 18:42:17</strong><span>(Horário de Brasília)</span></div>
-    <div class="tse-badge">
-      <img src="https://www.tse.jus.br/@@site-logo/logo.jpg" alt="TSE">
-      <div><strong>TSE</strong><small>Tribunal Superior<br>Eleitoral</small></div>
-    </div>
+    <div class="tse-badge"><div class="tse-logo"></div><div><strong>TSE</strong><small>Tribunal Superior<br>Eleitoral</small></div></div>
   </div>
 </header>
+
 <nav class="nav-tabs">
   <button class="home active" data-cargo="presidente">⌂</button>
   <button data-cargo="presidente" class="tab-active">PRESIDENTE</button>
@@ -47,6 +45,7 @@
   </select>
   <select id="municipio"><option value="Todos os municípios">Todos os municípios</option></select>
 </nav>
+
 <main class="container">
   <section class="top-grid">
     <div class="candidate-panel" id="presidente-panel"></div>
@@ -56,7 +55,7 @@
       <div class="section-title"><span>▥</span> APURAÇÃO NACIONAL</div>
       <div class="big-number"><span id="progress-number">68,4%</span></div>
       <div class="progress"><span id="progress-bar"></span></div>
-      <div class="progress-caption">312.845 de 456.789 seções</div>
+      <div class="progress-caption">312.845 de 456.789 seções • Brasil</div>
       <div class="mini-grid">
         <div><span>👥</span><small>Votos apurados</small><strong>74.382.921</strong></div>
         <div><span>▤</span><small>Comparecimento</small><strong>78,2%</strong><em>de 156.473.921</em></div>
@@ -64,6 +63,7 @@
       </div>
     </section>
   </section>
+
   <section class="bottom-grid">
     <section class="card evolution">
       <div class="section-title"><span>▥</span> EVOLUÇÃO DA APURAÇÃO</div>
@@ -80,20 +80,21 @@
       </div>
       <div class="legend"><span><i class="dot-blue"></i> Seções totalizadas</span><span><i class="dot-gray"></i> Projeção</span></div>
     </section>
+
     <section class="card map-card">
-      <div class="section-title"><span>✦</span> MAPA DO BRASIL</div>
-      <div class="map-area">
-        <div class="map-controls"><button>+</button><button>−</button><button>⌾</button></div>
-        <div class="real-map-wrap"><img class="real-map" src="https://commons.wikimedia.org/wiki/Special:FilePath/Brazil%20states.svg?width=720" alt="Mapa dos estados do Brasil"></div>
-        <div class="map-legend"><strong>Legenda</strong><span><i class="c c1"></i> Acima de 80%</span><span><i class="c c2"></i> Entre 60% e 80%</span><span><i class="c c3"></i> Entre 40% e 60%</span><span><i class="c c4"></i> Entre 20% e 40%</span><span><i class="c c5"></i> Abaixo de 20%</span><span><i class="c c6"></i> Sem dados</span></div>
+      <img class="map-reference" src="assets/map-card-reference.png" alt="Mapa do Brasil por seções totalizadas">
+      <div class="map-hit-area" aria-label="Seleção de UF no mapa">
+        <div class="state s1">RR</div><div class="state s2">AP</div><div class="state s3">AM</div><div class="state s4">PA</div><div class="state s5">MA</div><div class="state s6">CE</div><div class="state s7">RN</div><div class="state s8">PB</div><div class="state s9">PE</div><div class="state s10">AC</div><div class="state s11">RO</div><div class="state s12">TO</div><div class="state s13">PI</div><div class="state s14">BA</div><div class="state s15">MT</div><div class="state s16">GO</div><div class="state s17">DF</div><div class="state s18">MG</div><div class="state s19">ES</div><div class="state s20">MS</div><div class="state s21">RJ</div><div class="state s22">SP</div><div class="state s23">PR</div><div class="state s24">SC</div><div class="state s25">RS</div>
       </div>
     </section>
+
     <section class="card updates">
       <div class="section-title"><span>◷</span> ÚLTIMAS ATUALIZAÇÕES <a href="#">Ver todas →</a></div>
       <div class="update-list" id="updates"></div>
     </section>
   </section>
 </main>
+
 <footer><span>Fonte: dados oficiais do TSE</span><span>Última atualização: 04/10/2026 • 18:42:17 (Horário de Brasília)</span><nav><a>Radar Eleitoral 2026</a><a>Transparência</a><a>Dados abertos</a><a>Sobre o projeto</a></nav></footer>
 <script src="app.js"></script>
 </body>
