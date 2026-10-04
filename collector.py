@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Radar Eleitoral 2026 - Coletor V2
+Radar Eleitoral 2026 - Coletor V3
 
 Coleta dados públicos do TSE a partir do ele-c.json oficial.
 Os códigos de eleição e o ciclo são descobertos dinamicamente.
@@ -31,34 +31,54 @@ DATAS_INICIO_DIVULGACAO = {
     (2026, 10, 25),
 }
 
+
 def divulgacao_liberada() -> bool:
+    """
+    Impede consultas aos arquivos de resultados antes das 17h
+    nas datas oficiais de divulgação dos resultados.
+    """
+
     agora = datetime.now(BRASILIA)
 
     if (agora.year, agora.month, agora.day) in DATAS_INICIO_DIVULGACAO:
+
         if agora.hour < 17:
+
             print(
                 "[INFO] Divulgação dos resultados ainda não começou. "
                 f"Horário de Brasília: {agora:%d/%m/%Y %H:%M:%S}. "
                 "Próxima liberação: 17:00."
             )
+
             return False
 
     return True
 
-BASE_URL = os.getenv(
 
 BASE_URL = os.getenv(
     "TSE_BASE_URL",
     "https://resultados.tse.jus.br"
 ).rstrip("/")
 
-ENV = os.getenv("TSE_ENV", "oficial")
+ENV = os.getenv(
+    "TSE_ENV",
+    "oficial"
+)
 
-CONFIG_URL = f"{BASE_URL}/{ENV}/comum/config/ele-c.json"
+CONFIG_URL = (
+    f"{BASE_URL}/{ENV}/comum/config/ele-c.json"
+)
 
 ROOT = Path(__file__).resolve().parent
-LOCAL_CONFIG = ROOT / "config" / "settings.json"
-OUTPUT_DIR = ROOT / "data" / "processed"
+
+LOCAL_CONFIG = (
+    ROOT / "config" / "settings.json"
+)
+
+OUTPUT_DIR = (
+    ROOT / "data" / "processed"
+)
+
 
 UFS = [
     "ac", "al", "ap", "am", "ba", "ce", "df",
@@ -66,6 +86,7 @@ UFS = [
     "pb", "pr", "pe", "pi", "rj", "rn", "rs",
     "ro", "rr", "sc", "sp", "se", "to"
 ]
+
 
 CARGOS = {
     "1": "presidente",
@@ -76,12 +97,16 @@ CARGOS = {
     "8": "deputado_distrital"
 }
 
+
 # Evita consultas de arquivos que não existem.
 UF_POR_CARGO = {
     "3": UFS,
     "5": UFS,
     "6": UFS,
-    "7": [uf for uf in UFS if uf != "df"],
+    "7": [
+        uf for uf in UFS
+        if uf != "df"
+    ],
     "8": ["df"]
 }
 
@@ -94,7 +119,7 @@ SESSION = requests.Session()
 
 SESSION.headers.update({
     "User-Agent": (
-        "Radar-Eleitoral-2026/2.0 "
+        "Radar-Eleitoral-2026/3.0 "
         "(consumo de dados publicos do TSE)"
     ),
     "Accept": "application/json"
@@ -112,18 +137,27 @@ def carregar_config_local() -> dict[str, Any]:
         return {}
 
     try:
+
         return json.loads(
-            LOCAL_CONFIG.read_text(encoding="utf-8")
+            LOCAL_CONFIG.read_text(
+                encoding="utf-8"
+            )
         )
+
     except Exception as exc:
+
         print(
             f"[AVISO] Não foi possível ler "
             f"{LOCAL_CONFIG}: {exc}"
         )
+
         return {}
 
 
-def obter_json(url: str, tentativas: int = 3) -> Any | None:
+def obter_json(
+    url: str,
+    tentativas: int = 3
+) -> Any | None:
     """
     Consulta um JSON do TSE com tratamento de erros.
 
@@ -131,25 +165,42 @@ def obter_json(url: str, tentativas: int = 3) -> Any | None:
     404 podem provocar bloqueio temporário.
     """
 
-    for tentativa in range(1, tentativas + 1):
+    for tentativa in range(
+        1,
+        tentativas + 1
+    ):
 
         try:
+
             resposta = SESSION.get(
                 url,
                 timeout=20
             )
 
             if resposta.status_code == 200:
+
                 return resposta.json()
 
             if resposta.status_code == 404:
-                print(f"[404] {url}")
+
+                print(
+                    f"[404] {url}"
+                )
+
                 return None
 
             if resposta.status_code in (
-                429, 500, 502, 503, 504
+                429,
+                500,
+                502,
+                503,
+                504
             ):
-                espera = min(10, tentativa * 2)
+
+                espera = min(
+                    10,
+                    tentativa * 2
+                )
 
                 print(
                     f"[HTTP {resposta.status_code}] "
@@ -158,10 +209,12 @@ def obter_json(url: str, tentativas: int = 3) -> Any | None:
                 )
 
                 time.sleep(espera)
+
                 continue
 
             print(
-                f"[HTTP {resposta.status_code}] {url}"
+                f"[HTTP {resposta.status_code}] "
+                f"{url}"
             )
 
             return None
@@ -169,9 +222,12 @@ def obter_json(url: str, tentativas: int = 3) -> Any | None:
         except requests.RequestException as exc:
 
             if tentativa == tentativas:
+
                 print(
-                    f"[ERRO] Falha ao acessar {url}: {exc}"
+                    f"[ERRO] Falha ao acessar "
+                    f"{url}: {exc}"
                 )
+
                 return None
 
             time.sleep(tentativa)
@@ -186,15 +242,22 @@ def obter_json(url: str, tentativas: int = 3) -> Any | None:
 def obter_config_tse() -> dict[str, Any]:
 
     print(
-        f"[INFO] Consultando configuração oficial:\n"
+        "[INFO] Consultando configuração oficial:\n"
         f"{CONFIG_URL}"
     )
 
-    config = obter_json(CONFIG_URL)
+    config = obter_json(
+        CONFIG_URL
+    )
 
-    if not isinstance(config, dict):
+    if not isinstance(
+        config,
+        dict
+    ):
+
         raise RuntimeError(
-            "Não foi possível obter o ele-c.json oficial."
+            "Não foi possível obter "
+            "o ele-c.json oficial."
         )
 
     return config
@@ -204,13 +267,18 @@ def localizar_ele2026(
     config: dict[str, Any]
 ) -> dict[str, Any]:
 
-    for pleito in config.get("pl", []):
+    for pleito in config.get(
+        "pl",
+        []
+    ):
 
         if pleito.get("c") == "ele2026":
+
             return pleito
 
     raise RuntimeError(
-        "O ele-c.json não contém o ciclo ele2026."
+        "O ele-c.json não contém "
+        "o ciclo ele2026."
     )
 
 
@@ -223,9 +291,13 @@ def selecionar_eleicoes(
     turno: str
 ) -> list[dict[str, Any]]:
 
-    eleicoes = pleito.get("e", [])
+    eleicoes = pleito.get(
+        "e",
+        []
+    )
 
     if not eleicoes:
+
         raise RuntimeError(
             "Nenhuma eleição foi encontrada."
         )
@@ -244,32 +316,44 @@ def selecionar_eleicoes(
         )
 
         selecionadas = [
-            e for e in eleicoes
-            if int(e.get("t", 1)) == maior_turno
+            e
+            for e in eleicoes
+            if int(e.get("t", 1))
+            == maior_turno
         ]
 
     else:
-    
-        turno_numero = int(turno)
-    
-        selecionadas = [
-            e for e in eleicoes
-            if int(e.get("t", 1)) == turno_numero
-        ]
-    
-    selecionadas = [
-        e for e in selecionadas
-        if str(e.get("cd")) != "6261"
-    ]
-    
-    if not selecionadas:
-    
-        raise RuntimeError(
-            f"Não existe eleição publicada para "
-            f"o turno {turno}."
+
+        turno_numero = int(
+            turno
         )
 
-return selecionadas
+        selecionadas = [
+            e
+            for e in eleicoes
+            if int(e.get("t", 1))
+            == turno_numero
+        ]
+
+    # O código 6261 corresponde ao Conselho Distrital
+    # de Fernando de Noronha e não faz parte da coleta
+    # principal do Radar Eleitoral 2026.
+
+    selecionadas = [
+        e
+        for e in selecionadas
+        if str(e.get("cd")) != "6261"
+    ]
+
+    if not selecionadas:
+
+        raise RuntimeError(
+            f"Não existe eleição publicada "
+            f"para o turno {turno}."
+        )
+
+    return selecionadas
+
 
 # ============================================================
 # URLS
@@ -282,7 +366,20 @@ def montar_url(
     arquivo: str
 ) -> str:
 
-    ciclo = pleito.get("c", "ele2026")
+    ciclo = pleito.get(
+        "c",
+        "ele2026"
+    )
+
+    # IMPORTANTE:
+    # O código da eleição no diretório NÃO recebe
+    # preenchimento com zeros.
+    #
+    # Exemplo:
+    # /ele2026/6257/dados/
+    #
+    # O preenchimento com zeros é usado somente
+    # no nome dos arquivos.
 
     codigo_eleicao = str(
         eleicao["cd"]
@@ -308,7 +405,9 @@ def arquivo_acompanhamento(
         eleicao["cd"]
     ).zfill(6)
 
-    return f"{uf}-e{codigo}-ab.json"
+    return (
+        f"{uf}-e{codigo}-ab.json"
+    )
 
 
 def arquivo_ea20(
@@ -341,16 +440,25 @@ def obter_cargos(
 
     cargos = {}
 
-    for abrangencia in eleicao.get("abr", []):
+    for abrangencia in eleicao.get(
+        "abr",
+        []
+    ):
 
-        for cargo in abrangencia.get("cp", []):
+        for cargo in abrangencia.get(
+            "cp",
+            []
+        ):
 
             codigo = str(
                 cargo.get("cd")
             )
 
             if codigo in CARGOS:
-                cargos[codigo] = CARGOS[codigo]
+
+                cargos[codigo] = (
+                    CARGOS[codigo]
+                )
 
     return cargos
 
@@ -365,13 +473,19 @@ def obter_abrangencias(
 
     # Presidente:
     # somente resultado nacional.
+
     if codigo_cargo == "1":
+
         return ["br"]
 
     # Cargos estaduais:
     # resultado por UF.
+
     if codigo_cargo in UF_POR_CARGO:
-        return UF_POR_CARGO[codigo_cargo]
+
+        return UF_POR_CARGO[
+            codigo_cargo
+        ]
 
     return []
 
@@ -389,13 +503,18 @@ def coletar_acompanhamento(
 
     # EA14 = Brasil
     # EA15 = UFs
-    abrangencias = ["br"] + UFS
+
+    abrangencias = [
+        "br"
+    ] + UFS
 
     for uf in abrangencias:
 
-        arquivo = arquivo_acompanhamento(
-            eleicao,
-            uf
+        arquivo = (
+            arquivo_acompanhamento(
+                eleicao,
+                uf
+            )
         )
 
         url = montar_url(
@@ -405,7 +524,9 @@ def coletar_acompanhamento(
             arquivo
         )
 
-        dados = obter_json(url)
+        dados = obter_json(
+            url
+        )
 
         if dados is not None:
 
@@ -416,7 +537,10 @@ def coletar_acompanhamento(
             }
 
         # Pequena pausa para não gerar rajada.
-        time.sleep(0.05)
+
+        time.sleep(
+            0.05
+        )
 
     return resultado
 
@@ -432,12 +556,16 @@ def coletar_ea20(
 
     resultado = {}
 
-    cargos = obter_cargos(eleicao)
+    cargos = obter_cargos(
+        eleicao
+    )
 
     for codigo_cargo, nome_cargo in cargos.items():
 
-        abrangencias = obter_abrangencias(
-            codigo_cargo
+        abrangencias = (
+            obter_abrangencias(
+                codigo_cargo
+            )
         )
 
         for uf in abrangencias:
@@ -455,7 +583,9 @@ def coletar_ea20(
                 arquivo
             )
 
-            dados = obter_json(url)
+            dados = obter_json(
+                url
+            )
 
             if dados is not None:
 
@@ -472,7 +602,9 @@ def coletar_ea20(
                     "dados": dados
                 }
 
-            time.sleep(0.05)
+            time.sleep(
+                0.05
+            )
 
     return resultado
 
@@ -499,7 +631,7 @@ def salvar_resultado(
 
     dados = {
         "projeto": "Radar Eleitoral 2026",
-        "versao_coletor": "V2",
+        "versao_coletor": "V3",
         "fonte": "TSE",
         "gerado_em_utc": agora,
 
@@ -544,17 +676,20 @@ def salvar_resultado(
 
     status = {
         "projeto": "Radar Eleitoral 2026",
-        "versao_coletor": "V2",
+        "versao_coletor": "V3",
         "gerado_em_utc": agora,
         "fonte": "TSE",
+
         "eleicoes": [
             e.get("cd")
             for e in eleicoes
         ],
+
         "arquivos_acompanhamento": sum(
             len(v)
             for v in acompanhamento.values()
         ),
+
         "arquivos_ea20": sum(
             len(v)
             for v in resultados.values()
@@ -582,7 +717,9 @@ def salvar_resultado(
 # EXECUÇÃO
 # ============================================================
 
-def executar(turno: str) -> int:
+def executar(
+    turno: str
+) -> int:
 
     carregar_config_local()
 
@@ -591,23 +728,34 @@ def executar(turno: str) -> int:
     pleito = localizar_ele2026(
         config
     )
-    
+
+    # Impede qualquer consulta aos arquivos de
+    # resultados antes do início oficial da divulgação.
+
     if not divulgacao_liberada():
-        print("[INFO] Coleta encerrada antes do início da divulgação.")
+
+        print(
+            "[INFO] Coleta encerrada antes "
+            "do início da divulgação."
+        )
+
         return 0
-    
+
     eleicoes = selecionar_eleicoes(
         pleito,
         turno
     )
 
     print()
+
     print(
-        f"[OK] Pleito: {pleito.get('cd')}"
+        f"[OK] Pleito: "
+        f"{pleito.get('cd')}"
     )
 
     print(
-        f"[OK] Ciclo: {pleito.get('c')}"
+        f"[OK] Ciclo: "
+        f"{pleito.get('c')}"
     )
 
     print(
@@ -616,6 +764,7 @@ def executar(turno: str) -> int:
     )
 
     acompanhamento = {}
+
     resultados = {}
 
     for eleicao in eleicoes:
@@ -624,9 +773,12 @@ def executar(turno: str) -> int:
             eleicao.get("cd")
         )
 
-        nome = eleicao.get("nm")
+        nome = eleicao.get(
+            "nm"
+        )
 
         print()
+
         print(
             "=" * 60
         )
@@ -682,8 +834,9 @@ def executar(turno: str) -> int:
     )
 
     print()
+
     print(
-        "============================================================"
+        "=" * 60
     )
 
     print(
@@ -708,7 +861,11 @@ def main() -> int:
 
     parser.add_argument(
         "--turno",
-        choices=["auto", "1", "2"],
+        choices=[
+            "auto",
+            "1",
+            "2"
+        ],
         default="auto",
         help=(
             "Turno da eleição. "
@@ -742,4 +899,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+
+    sys.exit(
+        main()
+    )
